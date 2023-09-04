@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors  import CORS
 import models
+
 app = Flask(__name__)
+CORS(app)
 
 # Enpoint Muestra todos los Usuarios
-@app.route("/user", methods=["GET"])
+@app.route("/users", methods=["GET"])
 def get_user():
     resultados = []
     result = models.obtener_registros()
@@ -11,7 +14,7 @@ def get_user():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         print(list2dic)
-        new_dict = {'name':list2dic['name'], 'realname': list2dic['realname'], 'fisrtname': list2dic['firstname'], 'registration_number': list2dic['registration_number'], 'comment': list2dic['comment']}
+        new_dict = { 'id':list2dic['id'],'name':list2dic['name'], 'realname': list2dic['realname'], 'fisrtname': list2dic['firstname'], 'registration_number': list2dic['registration_number'], 'comment': list2dic['comment']}
         print('--------------------------')
         print(new_dict)
         resultados.append(new_dict)
@@ -19,6 +22,32 @@ def get_user():
     #print(resultados)
     return jsonify({"data":resultados})
 
+@app.route('/user-detail')
+def saludo():
+    id = request.args.get('id')
+    resultados = []
+
+    ##* Celulares *##
+    result = models.obtener_telefonos(id)
+
+    claves = ['id','entities_id', 'name', 'date_mod',   ]
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        print(list2dic)
+        resultados.append(list2dic)
+
+
+    ##* Impresoras *##
+    result = models.obtener_impresoras(id)
+
+    claves = ['id','entities_id','is_recursive', 'name', 'date_mod',   ]
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        print(list2dic)
+        resultados.append(list2dic)
+
+
+    return  jsonify(resultados)
 
 
 if __name__ == '__main__':

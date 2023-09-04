@@ -1,25 +1,43 @@
 from bd import conexion
-from collections import namedtuple
 
 
 def obtener_registros():
     con = conexion()
     registros = []
     with con.cursor() as cursor:
-        cursor.execute("SELECT * FROM glpi_users")
+        cursor.execute("SELECT * FROM glpi_users ORDER BY firstname")
     registros = cursor.fetchall()
     con.close()
 
     return registros
 
 
-def obtener_x_id(id):
+##################################################################
+##                 OBTENCION DE MATERIALES ASIGNADOS            ##
+##################################################################
+
+def obtener_impresoras(id):
+    print(f"id == {id}")
     con = conexion()
     registros = []
     with con.cursor() as cursor:
-        cursor.execute("SELECT * FROM user WHERE id=%s", id)
-    registros = cursor.fetchone()
+        print(f"SELECT * FROM glpi_users WHERE id={id}")
+        cursor.execute(f"SELECT * FROM glpi_printers WHERE users_id_tech = {id}")
+    registros = cursor.fetchall()
     con.close()
+    print(registros)
+    return registros
+
+def obtener_telefonos(id):
+    print(f"id == {id}")
+    con = conexion()
+    registros = []
+    with con.cursor() as cursor:
+        print(f"SELECT * FROM glpi_users WHERE id={id}")
+        cursor.execute(f"SELECT * FROM glpi_phones WHERE users_id_tech = {id}")
+    registros = cursor.fetchall()
+    con.close()
+    print(registros)
     return registros
 
 
