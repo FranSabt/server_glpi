@@ -27,6 +27,15 @@ def saludo():
     id = request.args.get('id')
     resultados = []
 
+    ##* Computadoras *##
+    result = models.obtener_computadoras(id)
+
+    claves = ['id','entities_id', 'name', 'serial', 'other_serial'  ]
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        print(list2dic)
+        resultados.append(list2dic)
+
     ##* Celulares *##
     result = models.obtener_telefonos(id)
 
@@ -45,6 +54,7 @@ def saludo():
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         print(list2dic)
         resultados.append(list2dic)
+
 
 
     return  jsonify(resultados)
