@@ -1,0 +1,11 @@
+X-glpi_computers
+X-glpi_monitors
+X-glpi_networkequipments
+X-glpi_peripherals
+X-glpi_printers
+X-glpi_phones
+!!!! - glpi_plugin_genericobject_puntosdeventas
+X-glpi_racks
+glpi_enclosures
+glpi_pdus
+glpi_passivedcequipments

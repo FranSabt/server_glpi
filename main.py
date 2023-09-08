@@ -33,28 +33,110 @@ def saludo():
     claves = ['id','entities_id', 'name', 'serial', 'other_serial'  ]
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
-        print(list2dic)
+        list2dic['type']='Computador'
+        # print(list2dic)
         resultados.append(list2dic)
 
     ##* Celulares *##
     result = models.obtener_telefonos(id)
 
-    claves = ['id','entities_id', 'name', 'date_mod',   ]
+    claves = ['id','entities_id', 'name', 'date_mod', 'contact', 'contact_num', 'user_tech_id', 'group_id_tech','comment', 'serial', 'other_serial' ]
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
-        print(list2dic)
+        list2dic['type']='Celular'
+        # print(list2dic)
         resultados.append(list2dic)
-
 
     ##* Impresoras *##
     result = models.obtener_impresoras(id)
 
-    claves = ['id','entities_id','is_recursive', 'name', 'date_mod',   ]
+    claves = ['id','entities_id','is_recursive', 'name', 'date_mod', 'contact', 'contact_num', 'user_tech_id', 'group_id_tech', 'serial', 'other_serial'   ]
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
-        print(list2dic)
+        list2dic['type']='Impresora'
+        # print(list2dic)
         resultados.append(list2dic)
 
+    ##* Monitores *##
+    result = models.obtener_monitores(id)
+
+    claves = ['id','entities_id', 'name', 'date_mod', 'contact', 'contact_num', 'user_tech_id', 'group_id_tech', 'comment', 'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Monitor'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    ##* Equipos de red *##
+    result = models.obtener_equipos_de_red(id)
+
+    claves = ['id','entities_id', 'is_recursive', 'name', 'ram', 'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Equipo de Red'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    ##* Perifericos *##
+    result = models.obtener_perifericos(id)
+
+    claves = ['id','entities_id', 'name', 'date_mod', 'contact', 'contact_num', 'user_tech_id', 'group_id_tech', 'comment', 'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Dispositivo periférico'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+
+    ##* Racks *##
+    result = models.obtener_racks(id)
+
+    claves = ['id', 'name', 'comment', 'entities_id', 'is_recursive', 'location',  'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Rack'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    ##* PDUs *##
+    result = models.obtener_pdus(id)
+
+    claves = ['id', 'name', 'entities_id', 'is_recursive', 'location',  'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='PDU'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    ##* Gabinetes / Enclosures *##
+    result = models.obtener_gabinetes(id)
+
+    claves = ['id', 'name', 'entities_id', 'is_recursive', 'location',  'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Gabinetes'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    ##* Equipos Pasivos *##
+    result = models.obtener_equipos_pasivos(id)
+
+    claves = ['id', 'name', 'entities_id', 'is_recursive', 'location',  'serial', 'other_serial']
+    for objetos in result:
+        list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+        list2dic['type']='Equipos pasivos'
+        # print(list2dic)
+        resultados.append(list2dic)
+
+    # ##* Puntos de venta *##
+    # #! La tabla no existia en copia de BD
+    # result = models.obtener_puntos_de_ventas(id)
+
+    # claves = ['id','entities_id', 'name', 'date_mod', 'contact', 'contact_num', 'user_tech_id', 'group_id_tech', 'comment', 'serial', 'other_serial']
+    # for objetos in result:
+    #     list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+    #     list2dic['type']='Punto de venta'
+    #     # print(list2dic)
 
 
     return  jsonify(resultados)
