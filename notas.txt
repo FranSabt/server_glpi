@@ -1,11 +1,21 @@
-X-glpi_computers
-X-glpi_monitors
-X-glpi_networkequipments
-X-glpi_peripherals
-X-glpi_printers
-X-glpi_phones
-!!!! - glpi_plugin_genericobject_puntosdeventas
-X-glpi_racks
-glpi_enclosures
-glpi_pdus
-glpi_passivedcequipments
+Instalacion de servidor Flask/Python
+
+    -   Generar entorno virtual:
+        Windows: py -m venv venv
+        Unix: python3 -m venv venv
+
+    - Activar entorno Virtual (dentro de la carpeta donde esta el proyecto):
+        Windows: .\venv\Scripts\activate
+        Unix: source venv/bin/activate
+
+    - Instalar requerimientos:
+        cualquier sistema: pip install -r requirements.txt
+
+    - Iniciar servidor de consultas:
+        Windows: py ./main.py
+        Unix: python3 /main.py
+
+    El servidor deberia estar escuchando en el puerto 5000
+
+
+----------------------------------------------------------------------------------
