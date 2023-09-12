@@ -10,7 +10,7 @@ const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>Artículo</th>
+          <th>Equipo(s)</th>
           <th>Serial</th>
           <th>Etiqueta</th>
           <th>Tipo</th>
