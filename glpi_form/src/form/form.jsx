@@ -1,5 +1,7 @@
 // import React from 'react'
 import { useState, useEffect } from 'react';
+import { BlobProvider, PDFViewer } from '@react-pdf/renderer';
+import PdfDocument from '../pdf/pdfDocument';
 import axios from 'axios';
 import DropNames from './dropname';
 import { Container, Button } from 'react-bootstrap';
@@ -12,6 +14,7 @@ const MyForm = () => {
   const [equipos, setEquipos] = useState([]);
   const [equiposSeleccionados, setEquiposSeleccionados] = useState([]);
   const [user, setUser] = useState({});
+  const [notaEntrega, setNotaEntrega] = useState(false);
   
   
   //* Llamada a la API para traer usuarios *//
@@ -51,15 +54,18 @@ const MyForm = () => {
   ///////////////////////////////////////////////////////////////
 
   const seleccionarEquipos = (equipoSeleccionado) => {
-    const equipo = equipos.find(e => e.name === equipoSeleccionado);
+  // const equipo = equipos.find(e => e.name === equipoSeleccionado );
+    console.log(equipoSeleccionado)
+
+    const equipo = equipoSeleccionado.data;
   
     // Verificar si el equipo ya existe en el array equiposSeleccionados
-    if (!equiposSeleccionados.some(e => e.name === equipo.name)) {
+    if (!equiposSeleccionados.some(e => e.serial === equipo.serial && e.name === equipo.name /*|| e.other_serial === equipo.other_serial */)) {
       const nuevoArrayEquipos = [...equiposSeleccionados, equipo];
       setEquiposSeleccionados(nuevoArrayEquipos);
     }
     else {
-      alert(`El equipo ${equipoSeleccionado} ya esta en la lista de equipos seleccioandos.`)
+      alert(`El equipo ${equipo.name} ya esta en la lista de equipos seleccioandos.`)
     }
   }
   ///////////////////////////////////////////////////////////////
@@ -71,8 +77,14 @@ const MyForm = () => {
   }
   
   ////////////////////////////////////////////////////////////////
+
+  const mostrarPDF = () => {
+    setNotaEntrega(!notaEntrega)
+  }
+
+  ////////////////////////////////////////////////////////////////
   
-  console.log('equipoSeleccionado', equiposSeleccionados)
+  //console.log('equipoSeleccionado', equiposSeleccionados)
   // console.log(user)
   return (
     <>
@@ -105,7 +117,8 @@ const MyForm = () => {
           </div>
         </div>
       </Container>
-          {
+        <div>
+        {
           equiposSeleccionados?.length > 0 ?
           <Container>
             <h3>Equipos Seleccionados</h3>
@@ -113,6 +126,18 @@ const MyForm = () => {
           </Container>
           : null
         }
+        </div>
+        <div>
+          <Container>
+            <Button disabled={ equiposSeleccionados.length > 0  ? false : true} onClick={mostrarPDF}>PDF</Button>
+            {notaEntrega ?
+              <PDFViewer width={"100%"} height={800}>
+            <PdfDocument user={user} equipos={equiposSeleccionados}/>
+          </PDFViewer>
+          : null}
+          </Container>
+        </div>
+
       <hr/>
       {/* /////////////////////////////////////////////////////////////////////////////////// */}
       {/* /////////////////////////////////////////////////////////////////////////////////// */}

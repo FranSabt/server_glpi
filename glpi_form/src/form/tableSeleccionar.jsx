@@ -4,7 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 
 // eslint-disable-next-line react/prop-types
 const TablaEquipos = ({ data, seleccionarEquipos }) => {
-  console.log('data tabla: ', data)
+  //console.log('data tabla: ', data)
   return (
     <Table striped bordered hover>
       <thead>
@@ -49,7 +49,7 @@ const TablaEquipos = ({ data, seleccionarEquipos }) => {
               </td>
               <td>{e.type}</td>
               <td className='mx-auto'>
-                <Button variant="outline-primary" onClick={() => seleccionarEquipos(e.name)}>Agregar</Button>{' '}
+                <Button variant="outline-primary" onClick={() => seleccionarEquipos({data: e})}>Agregar</Button>{' '}
               </td>
               {/* <td>{e?.serial}</td>
               <td>{e?.type}</td> */}

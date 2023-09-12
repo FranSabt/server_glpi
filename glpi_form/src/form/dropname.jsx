@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 const DropNames = ({ users, handleUserSelect, vaciarEquipos }) => {
   return (
     <Form.Select className='form-control-sm' aria-label="Default select example" onChange={(e) =>{ 
-      handleUserSelect(e.target.value), vaciarEquipos(), console.log(e.target.value)
+      handleUserSelect(e.target.value), vaciarEquipos()
       } }>
       <option>Seleccione un usuario</option>
       {

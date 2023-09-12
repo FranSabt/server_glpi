@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
 
 const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
-  console.log('data tabla: ', data)
+  //console.log('data tabla: ', data)
   return (
 
     <Table striped bordered hover>
@@ -14,7 +14,7 @@ const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
           <th>Serial</th>
           <th>Etiqueta</th>
           <th>Tipo</th>
-          <th>Agregar a Nota</th>
+          <th>Quitar de Nota</th>
         </tr>
       </thead>
       <tbody>
