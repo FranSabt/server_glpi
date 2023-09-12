@@ -9,7 +9,7 @@ const TablaEquipos = ({ data, seleccionarEquipos }) => {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>Equipo</th>
+          <th>Artículo</th>
           <th>Serial</th>
           <th>Etiqueta</th>
           <th>Tipo</th>

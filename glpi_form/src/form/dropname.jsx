@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form';
 const DropNames = ({ users, handleUserSelect, vaciarEquipos }) => {
   return (
     <Form.Select className='form-control-sm' aria-label="Default select example" onChange={(e) =>{ 
-      handleUserSelect(e.target.value), vaciarEquipos()
+      e.target.value !== "Seleccione un usuario" ? handleUserSelect(e.target.value) : null, vaciarEquipos()
       } }>
-      <option>Seleccione un usuario</option>
+      <option value={undefined} name={undefined}>Seleccione un usuario</option>
       {
         // eslint-disable-next-line react/prop-types
         users?.map( (user) => <option value={user.name} key={user.name} name={user.name}>{ user.fisrtname ? `${user.fisrtname} ${user.realname}` : user.name }</option> )

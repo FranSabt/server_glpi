@@ -7,6 +7,7 @@ import DropNames from './dropname';
 import { Container, Button } from 'react-bootstrap';
 import TablaEquipos from './tableSeleccionar';
 import TablaEquiposSeleccionados from './tableSeleccionados'
+import AgregarManualmente from './agregarManualmente';
 
 const MyForm = () => {
 
@@ -55,12 +56,13 @@ const MyForm = () => {
 
   const seleccionarEquipos = (equipoSeleccionado) => {
   // const equipo = equipos.find(e => e.name === equipoSeleccionado );
-    console.log(equipoSeleccionado)
+  // console.log(equipoSeleccionado)
 
     const equipo = equipoSeleccionado.data;
   
     // Verificar si el equipo ya existe en el array equiposSeleccionados
-    if (!equiposSeleccionados.some(e => e.serial === equipo.serial && e.name === equipo.name /*|| e.other_serial === equipo.other_serial */)) {
+    // Si el serial y/o la etiqueta no es "undefined" se compara si existe en la lista de equipos seleccionados
+    if (!equiposSeleccionados.some(e => (e.serial !== undefined && e.serial === equipo.serial) && e.name === equipo.name && (e.other_serial !== undefined && e.other_serial === equipo.other_serial))) {
       const nuevoArrayEquipos = [...equiposSeleccionados, equipo];
       setEquiposSeleccionados(nuevoArrayEquipos);
     }
@@ -83,9 +85,11 @@ const MyForm = () => {
   }
 
   ////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////////
   
   //console.log('equipoSeleccionado', equiposSeleccionados)
-  // console.log(user)
+  console.log(user)
   return (
     <>
       <Container className='sm m-5 px-5'>
@@ -105,16 +109,17 @@ const MyForm = () => {
         <div>
           <div>
           {
-            user ? 
+            user && (user !== 'Seleccione un usuario') ? 
             <Container className='m-5 '>
-              <h4>Nombre  :   <span className="badge bg-secondary">{user.fisrtname}</span></h4>
-              <h4>Apellido: <span className="badge bg-secondary">{user.realname}</span></h4>
-              <h4>Cargo   :    <span className="badge bg-secondary">{user.comment}</span></h4>
-              <h4>CI      :       <span className="badge bg-secondary">{user.registration_number}</span></h4>
+              <h4>Nombre  :   <span className="badge bg-dark">{user.fisrtname ? user.fisrtname : ''}</span></h4>
+              <h4>Apellido: <span className="badge bg-dark">{user.realname ? user.realname : ''}</span></h4>
+              <h4>Cargo   :    <span className="badge bg-dark">{user.comment ? user.comment : ''}</span></h4>
+              <h4>CI      :       <span className="badge bg-dark">{user.registration_number ? user.registration_number : ''}</span></h4>
             </Container>
             : null
           }
           </div>
+          <AgregarManualmente seleccionarEquipos={seleccionarEquipos} user={user.name}/>
         </div>
       </Container>
         <div>
@@ -129,8 +134,8 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            <Button disabled={ equiposSeleccionados.length > 0  ? false : true} onClick={mostrarPDF}>PDF</Button>
-            {notaEntrega ?
+            <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={mostrarPDF}>PDF</Button>
+            {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
             <PdfDocument user={user} equipos={equiposSeleccionados}/>
           </PDFViewer>
@@ -151,7 +156,7 @@ const MyForm = () => {
         }
         <div>
             {
-              user ? 
+              user.name ? 
               <Container className='m-5 '>
                 <Button onClick={buscarEquipos}>
                   Buscar Equipos

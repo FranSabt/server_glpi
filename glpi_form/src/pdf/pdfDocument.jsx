@@ -17,12 +17,14 @@ const styles = StyleSheet.create({
   },
   section: {
     flexGrow: 1,
+    marginHorizontal: 20
   },
   title: {
     fontSize: 24,
     textAlign: "center",
     marginBottom: 10,
     fontFamily: "Helvetica-Bold",
+    marginTop: 10
   },
   subtitle: {
     paddingTop: 25,
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     paddingTop: 7,
-    width: 100,
+    width: 150,
     height: 50,
     marginBottom: 20,
   },
@@ -149,13 +151,13 @@ const PdfDocument = ({user, equipos}) => {
             src={Logo}
             style={styles.logo}
           />
-          <Text style={styles.date}>Valencia {`${dia}/${mes}/${anno}`}</Text>
+          {/* <Text style={styles.date}>Valencia {`${dia}/${mes}/${anno}`}</Text> */}
           <Text style={styles.title}>NOTA DE ENTREGA</Text>
 
           <Text style={styles.text}>
             Por medio de la presente, la Organización Netcom Plus C. A., a través
             del departamento de Tecnología de Información (IT), hace entrega en modo de
-            asignación los siguientes equipos:
+            asignación del(los) siguiente(s) equipo(s):
           </Text>
 
           <View style={styles.table}>
@@ -185,35 +187,28 @@ const PdfDocument = ({user, equipos}) => {
           
 
           <Text style={styles.conditions}>
-            - Los equipos asignados son propiedad de la empresa y deben ser
-            usados por el personal de Netcom Plus, C. A. como herramienta(s) de
-            trabajo. Por tal motivo en ningún momento se podrá considerar dichos equipos como
-            remuneración o salario en especie.
+            1 - Los equipos asignados son propiedad de la empresa y deben ser utilizados exclusivamente por el personal de Netcom Plus, C. A. como herramientas de trabajo. En ningún momento podrán considerarse estos equipos como parte de la remuneración o salario en especie.
           </Text>
           <Text style={styles.conditions}>
-            - Debe limitarse su uso exclusivamente a actividades relacionadas
-            con su gestión de trabajo.
+            2 - El uso de estos equipos debe estar limitado estrictamente a actividades relacionadas con las responsabilidades laborales del empleado.
           </Text>
           <Text style={styles.conditions}>
-            - Estos instrumentos implican un costo para la organización, por lo que se debe hacer su mejor
-            esfuerzo para asegurar la protección, cuidado y resguardo del
-            equipo.
+            3 - Dado que estos instrumentos representan un costo para la organización, se espera que se realice el mejor esfuerzo para garantizar la protección, cuidado y seguridad de los equipos.
           </Text>
           <Text style={styles.conditions}>
-            - Reportar al Departamento de Tecnología e Información a la extensión 8009 o a través de WhatsApp al +58 414-4032935 cualquier anormalidad en la
-            operatividad del equipo y/o en los sistemas instalados en él.
+            4 - Cualquier irregularidad en el funcionamiento de los equipos y/o en los sistemas instalados en ellos debe ser notificada al Departamento de Tecnología e Información a través de la extensión 8009 o mediante WhatsApp al número +58 414-4032935.
           </Text>
           <Text style={styles.conditions}>
-            - No permitir manipulación de los equipos por parte de personas ajenas a la empresa.
+            5 - No está permitido que personas ajenas a la empresa manipulen los equipos en ningún momento.
           </Text>
           <Text style={styles.conditions}>
-            - Cualquier comentario o duda respecto al uso de este activo favor dirigirse a este departamento.
+            6 - Si surge algún comentario o duda en relación al uso de estos activos, se solicita que se dirija al Departamento de Tecnología e Información para obtener orientación.
           </Text>
 
           <View style={styles.signatureContainer}>
             <View style={styles.signature}>
               <Text style={styles.signatureLabel}>
-                {`Firma\nMirialys Gomez\nGTE. JR. INFO. Y TECNOLOGÍA`}
+                {`Firma\nMirialys Gómez\nGTE. JR. INFO. Y TECNOLOGÍA`}
               </Text>
               {/* Agrega aquí la representación de la firma del Usuario 1 */}
             </View>
