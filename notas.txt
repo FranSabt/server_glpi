@@ -19,3 +19,45 @@ Instalacion de servidor Flask/Python
 
 
 ----------------------------------------------------------------------------------
+Instalacion de formulario React/Vite
+
+Instalar node.js, en Windows se puede realizar desde la pagina oficial de Node
+
+En Ubuntu Destokp se puede buscar en https://snapcraft.io/node
+
+Para UbuntuServer:
+
+    1 - Actualizar el sistema
+        sudo apt update
+        sudo apt upgrade
+
+    2 - Asegurarse de tener 'curl':
+        sudo apt install curl
+
+    3 - Buscar paquetes Node (a 2023 la version mas actual es la 18, revisar en pagina oficial):
+        curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -   
+
+    4 - Instalar:
+        sudo apt install nodejs
+
+    5 - Chequear version de Node y 'npm'
+        node -v
+        npm -v
+
+
+Ir a la carpeta glpi_form en la terminal y iniciar el comando:
+    'npm i'
+    esto iniciara la instalacion de todos los paquetes Necesarios para que corra la App
+
+    instaqlar pm2 para dejar la app corriendo en segundo plano:
+    'npm install -g pm2'
+
+    construir el archivo de produccion:
+    'npm run build'
+
+    iniciar app en segundo plano:
+    'pm2 start server.js;
+
+
+
+

@@ -36,7 +36,7 @@ const AgregarManualmente = ({ seleccionarEquipos, user }) => {
         <span className="input-group-text" id="other_serial" name="other_serial">Etiqueta</span>
         <input type="text" className="form-control me-2" placeholder="Etiqueta del equipo" aria-label="Username" aria-describedby="basic-addon1" onChange={crearArtculo} name="other_serial"/>
         <span className="input-group-text" id="other_serial" name="other_serial">Tipo</span>
-        <input type="text" className="form-control me-2" placeholder="Etiqueta del equipo" aria-label="Username" aria-describedby="basic-addon1" onChange={crearArtculo} name="type"/>
+        <input type="text" className="form-control me-2" placeholder="Tipo de equipo" aria-label="Username" aria-describedby="basic-addon1" onChange={crearArtculo} name="type"/>
         <Button variant="success" disabled={!(articulo.name && user)} onClick={enviarArticulo} >Agregar equipo</Button>
         <p>Llene los campos de arriba para agregar un articulo manualmente que no se encuentre listado para el usuario.</p>
       </div>
