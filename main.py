@@ -5,6 +5,24 @@ import models
 app = Flask(__name__)
 CORS(app)
 
+import mail
+
+app = Flask(__name__)
+app.config['MAIL_SERVER']='smtp.netcomplusve.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'fhernandez@netcomplusve.com'
+app.config['MAIL_PASSWORD'] = 'j2b*c*fE1223'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail.configure(app)
+
+# 
+@app.route('/mail')
+def index():
+    mail.send_email('hsabatino1@gmail.com', 'Hola', '<b>¡Hola, mundo!</b>')
+    return "Correo enviado"
+
 # Enpoint Muestra todos los Usuarios
 @app.route("/users", methods=["GET"])
 def get_user():

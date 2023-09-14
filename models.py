@@ -24,7 +24,7 @@ def obtener_impresoras(id):
     con = conexion()
     registros = []
     with con.cursor() as cursor:
-        print(f"SELECT * FROM glpi_users WHERE id={id}")
+        #print(f"SELECT * FROM glpi_users WHERE id={id}")
         cursor.execute(f"SELECT * FROM glpi_printers WHERE users_id_tech = {id}")
     registros = cursor.fetchall()
     con.close()

@@ -1,0 +1,20 @@
+Sí, puedes almacenar datos JSON en MySQL y realizar consultas en ellos. MySQL versión 5.7.8 introduce un tipo de datos JSON que te permite acceder a los datos en documentos JSON¹. 
+
+Para buscar un objeto JSON con una propiedad específica, puedes usar la función `JSON_CONTAINS()`. Esta función indica si un documento JSON candidato está contenido dentro de un documento JSON objetivo². Aquí tienes un ejemplo de cómo podrías usarlo:
+
+```sql
+SELECT * FROM table
+WHERE JSON_CONTAINS(json_column, '{"name": "fran"}');
+```
+
+En este caso, `table` es el nombre de tu tabla y `json_column` es la columna que contiene los datos JSON. Esta consulta te devolverá todas las filas donde la columna JSON contiene el objeto `{"name": "fran"}`.
+
+Por lo tanto, si tienes objetos JSON como `{"name":"fran", "id":5, "pc":7}` y `{"name":"fran", "house":"casita", "id":9}` en tu columna JSON, ambos serán devueltos por la consulta anterior.
+
+Por favor ten en cuenta que esta es una explicación simplificada y el uso real puede requerir ajustes dependiendo de tus necesidades específicas y la estructura de tus datos.
+
+Source: Conversation with Bing, 14/9/2023
+(1) How To Work with JSON in MySQL | DigitalOcean. https://www.digitalocean.com/community/tutorials/working-with-json-in-mysql.
+(2) 12.17.3 Functions That Search JSON Values - MySQL. https://dev.mysql.com/doc/refman/8.0/en/json-search-functions.html.
+(3) The JSON_QUERY() function to extract objects from JSON Data - SQL Shack. https://www.sqlshack.com/the-json_query-function-to-extract-objects-from-json-data/.
+(4) MySQL :: MySQL 8.0 Reference Manual :: 11.5 The JSON Data Type. https://dev.mysql.com/doc/refman/8.0/en/json.html.
