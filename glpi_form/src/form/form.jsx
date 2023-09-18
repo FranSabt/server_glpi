@@ -41,14 +41,13 @@ const MyForm = () => {
   ////////////////////////////////////////////////////////////
   const buscarEquipos = () => {
     // console.log('click')
-    axios.get(`http://localhost:5000/user-detail?id=${user.id}`).then((response) => {
-      setEquipos(response.data)
-      // console.log('equipos', equipos)
-    })
-    .catch((error) => {
-      // handle error
-      console.log(error);
-    });
+    try{
+      const response = axios.get(`http://localhost:5000/user-detail?id=${user.id}`)
+      console.log(response)
+    }
+    catch (error){
+      console.error(error)
+    }
   }
   ///////////////////////////////////////////////////////////////
   const vaciarEquipos = () => { setEquipos([]), setEquiposSeleccionados([])}
