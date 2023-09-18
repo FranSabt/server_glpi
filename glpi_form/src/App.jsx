@@ -23,10 +23,6 @@ const App = () => {
     <>
       <Mynavbar/>
       <RouterProvider router={router} />
-      {/* <MyForm/> */}
-      {/* <PDFViewer width={"100%"} height={800}>
-        <PdfDocument/>
-      </PDFViewer> */}
     </>
   );
 };

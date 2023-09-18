@@ -1,13 +1,33 @@
 // import React from 'react'
 import { useState, useEffect } from 'react';
-import { BlobProvider, PDFViewer } from '@react-pdf/renderer';
-import PdfDocument from '../pdf/pdfDocument';
-import axios from 'axios';
-import DropNames from './dropname';
+import { PDFViewer } from '@react-pdf/renderer';
 import { Container, Button } from 'react-bootstrap';
+import axios from 'axios';
+//* Componentes *//
+import PdfDocument from '../pdf/pdfDocument';
+import DropNames from './dropname';
 import TablaEquipos from './tableSeleccionar';
 import TablaEquiposSeleccionados from './tableSeleccionados'
 import AgregarManualmente from './agregarManualmente';
+
+/**
+ * Componente principal de la dirección raíz de la aplicación.
+ * 
+ * Primero busca la lista de usuarios, una vez seleccionado el usuario permite 
+ * realizar la busqueda en la BD de todos los articulos asignados a dicho usuario.
+ * 
+ * Por ende los articulo primero deben ser asignados en la interfaz del GLPI.
+ * 
+ * Se seleccionan los articulos y estos apareceran en la planilla PDF
+ * 
+ * TODO: lo siguiente está pendiente
+ * 
+ * Una vez seleccionados los equipos se verifica que aquellos que poseen serial y/o etiqueta (other_serial) 
+ * no se encuentren asignados a un usuario, de lo contrario se bloquea la planilla.
+ * 
+ * Si se debe desbloquear un producto pasa a "equipos asignados."
+ */
+
 
 const MyForm = () => {
 
@@ -17,7 +37,8 @@ const MyForm = () => {
   const [user, setUser] = useState({});
   const [notaEntrega, setNotaEntrega] = useState(false);
   
-  
+  ////////////////////////////////////////////////////////////
+
   //* Llamada a la API para traer usuarios *//
   useEffect(() => {
     axios.get('http://localhost:5000/users').then((response) => {
@@ -30,6 +51,9 @@ const MyForm = () => {
     });
   }, []);
 
+  ////////////////////////////////////////////////////////////
+
+  //* Metodo apra seleccionar un unico usuario y poder traer lo quipos asignados al mismo *//
   const handleUserSelect = (userSelected) => {
     // console.log('UserSelected', userSelected)
     const myUser = data.find(e => e.name === userSelected)
@@ -39,24 +63,35 @@ const MyForm = () => {
   
 
   ////////////////////////////////////////////////////////////
-  const buscarEquipos = () => {
-    // console.log('click')
+
+  //* Llamada a la API para traer los quipos asociados al usuario *//
+  const buscarEquipos = async () => {
     try{
-      const response = axios.get(`http://localhost:5000/user-detail?id=${user.id}`)
+      const response = await axios.get(`http://localhost:5000/user-detail?id=${user.id}`)
       console.log(response)
+      setEquipos(response.data)
     }
     catch (error){
       console.error(error)
     }
   }
   ///////////////////////////////////////////////////////////////
+
+  //* Vacia las lista de equipos *//
+  /**
+   * Vacia los estados donde se encuentran los equipos encontrados y seleccionados
+   * cuando se realiza un cambio de usuario en la seleccion de usuarios.
+   * 
+   * Se evita que se pueda crear una nota de entrega a un usuario 'A' que tenga 
+   * los quipos asignado a un usuario 'B'. 
+   */
   const vaciarEquipos = () => { setEquipos([]), setEquiposSeleccionados([])}
+
   ///////////////////////////////////////////////////////////////
 
-  const seleccionarEquipos = (equipoSeleccionado) => {
-  // const equipo = equipos.find(e => e.name === equipoSeleccionado );
-  // console.log(equipoSeleccionado)
+  //*  Permite selecciona un equipo para que este aparezca en la nota de entrega PDF *//
 
+  const seleccionarEquipos = (equipoSeleccionado) => {
     const equipo = equipoSeleccionado.data;
   
     // Verificar si el equipo ya existe en el array equiposSeleccionados
@@ -71,8 +106,8 @@ const MyForm = () => {
   }
   ///////////////////////////////////////////////////////////////
 
+  //* Se elimina un quipo de la lista de seleccionados y de la nota de entrega PDF *//
   const retirarEquipo = (equipoSeleccionado) => {
-    //* Se retira el equipo *//
     const equipo = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
       setEquiposSeleccionados(equipo);
   }

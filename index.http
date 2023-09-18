@@ -1,0 +1,21 @@
+POST http://localhost:5000/asignar-equipos
+Content-Type: application/json
+
+{
+    "orden_de_asignacion": 9,
+    "serial"             : "123456",
+    "etiqueta"           : "654321",
+    "asignado"           : true,
+    "user"               : "Fran",
+    "createby"           : "admin",
+    "updateby"           : "admin"
+}
+
+###
+POST http://localhost:5000/crear-orden
+Content-Type: application/json
+
+{
+    "usuario_asignado":"Fran",
+    "user_id_tech": 1
+}

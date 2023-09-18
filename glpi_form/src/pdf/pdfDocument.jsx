@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tableCell: {
-    fontSize:10,
+    fontSize:8,
     flex: 1,
     padding: 6,
   },
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   signatureLabel: {
-    fontSize: 10,
+    fontSize: 8,
     textAlign: "center",
     marginTop: "15%",
     fontFamily: "Helvetica-Bold",
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   footer: {
     marginTop:30,
     position: 'absolute',
-    fontSize: 12,
+    fontSize: 10,
     bottom: 30,
     left: 0,
     right: 0,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   conditions: {
     margin: 1.5,
-    fontSize: 11,
+    fontSize: 9,
     textAlign: "justify",
     fontFamily: "Helvetica",
     fontStyle: 'italic',
@@ -171,8 +171,8 @@ const PdfDocument = ({user, equipos}) => {
             {equipos.map((e) => (
               <View key={e.serial} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{e.name}</Text>
-                <Text style={styles.tableCell}>{e.serial ? e.serial : "NO TIENE SERIAL"}</Text>
-                <Text style={styles.tableCell}>{e.other_serial ? e.other_serial : "NO TIENE ETIQUETA "}</Text>
+                <Text style={styles.tableCell}>{e.serial ? e.serial : "SIN SERIAL"}</Text>
+                <Text style={styles.tableCell}>{e.other_serial ? e.other_serial : "SIN ETIQUETA "}</Text>
                 <Text style={styles.tableCell}>{e.type}</Text>
               </View>
             ))}
