@@ -3,7 +3,7 @@ from datetime import datetime
 
 ##################################################################
 ##               BUSQUEDA DE USUARIOS EN BD GLPI                ##
-##################################################################
+################################################################## 
 
 def obtener_registros():
     con = conexion()
@@ -148,6 +148,47 @@ def obtener_equipos_pasivos(id):
 ##              ENVIAR  MATERIALES ASIGNADOS TABLAS             ##
 ##################################################################
 
+def validar_equipos(data):
+    for element in data:
+        serial = element.get('serial')
+        other_serial = element.get('other_serial')
+        if serial and serial != 'consumible':
+            print("Serial")
+            print(element)
+            print('*****')
+            conn = conexion()
+            cursor = conn.cursor()
+            print("CONEXION CREADA")
+            print(" ")
+            cursor.execute(f"SELECT * FROM equipos_asignados WHERE  serial = '{serial}'")
+            registro = cursor.fetchall()
+            conn.close()
+            if registro: continue
+            else:  
+                element['validado'] = True
+                continue
+
+        if other_serial:
+            print("Etiqueta")
+            print(element)
+            print('*****')
+            conn = conexion()
+            cursor = conn.cursor()
+            print("CONEXION CREADA")
+            print(" ")
+            cursor.execute(f"SELECT * FROM equipos_asignados WHERE etiqueta = '{other_serial}'")
+            registro = cursor.fetchall()
+            conn.close()
+            if registro: 
+                continue
+            else:  
+                element['validado'] = True
+                continue
+        if serial != 'consumible':
+            element['validado'] = True
+
+    # return data
+
 
 def crear_orden_asignacion(data):
     usuario_asignado = data.get('usuario_asignado')
@@ -168,25 +209,27 @@ def crear_orden_asignacion(data):
 
 
 def asignar_equipos(data):
-    orden_de_asignacion  = data.get('orden_de_asignacion')
-    serial               = data.get('serial')
-    etiqueta             = data.get('etiqueta')
-    asignado             = True
-    user                 = data.get('user')
-    createat             = datetime.now().strftime('%Y-%m-%d')
-    createby             = data.get('createby')
-    updateat             = datetime.now().strftime('%Y-%m-%d')
-    updateby             = data.get('updateby')
+    id = 0
+    for equip in data:
+        orden_de_asignacion  = equip.get('orden_de_asignacion')
+        serial               = equip.get('serial') or 'sin serial'
+        etiqueta             = equip.get('etiqueta') or 'sin etiqueta'
+        asignado             = True
+        user                 = equip.get('user')
+        createat             = datetime.now().strftime('%Y-%m-%d')
+        createby             = equip.get('createby') or 'admin'
+        updateat             = datetime.now().strftime('%Y-%m-%d')
+        updateby             = equip.get('updateby') or 'admin'
 
 
-    conn = conexion()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO equipos_asignados ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)", ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby))
-    conn.commit()  # confirmar la transacción
+        conn = conexion()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO equipos_asignados ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)", ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby))
+        conn.commit()  # confirmar la transacción
 
-    id = cursor.lastrowid  # obtener el ID de la última fila insertada
+        id = equip.get('orden_de_asignacion')  # obtener el ID de la última fila insertada
 
-    cursor.execute("SELECT * FROM equipos_asignados WHERE id = %s", (id,))
+    cursor.execute("SELECT * FROM equipos_asignados WHERE orden_de_asignacion = %s", (id,))
     orden = cursor.fetchone()  # obtener los datos de la última fila insertada
 
     return [orden]

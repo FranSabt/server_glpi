@@ -6,7 +6,13 @@ app = Flask(__name__)
 
 import mail
 
-
+app = Flask(__name__)
+app.config['MAIL_SERVER']   = 'smtp.netcomplusve.com'
+app.config['MAIL_PORT']     = 465
+app.config['MAIL_USERNAME'] = 'fhernandez@netcomplusve.com'
+app.config['MAIL_PASSWORD'] = 'j2b*c*fE1223'
+app.config['MAIL_USE_TLS']  = False
+app.config['MAIL_USE_SSL']  = True
 
 mail.configure(app)
 CORS(app)
@@ -71,6 +77,7 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Computador'
+        list2dic['validado']=False
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -81,6 +88,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Celular'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -91,6 +100,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Impresora'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -101,6 +112,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Monitor'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -111,6 +124,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Equipo de Red'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -121,6 +136,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Dispositivo periférico'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -132,6 +149,8 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Rack'
+        list2dic['validado']=False
+
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -142,6 +161,7 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='PDU'
+        list2dic['validado']=False
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -152,6 +172,7 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Gabinetes'
+        list2dic['validado']=False
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -162,6 +183,7 @@ def saludo():
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
         list2dic['type']='Equipos pasivos'
+        list2dic['validado']=False
         # print(list2dic)
         resultados.append(list2dic)
 
@@ -184,7 +206,7 @@ def saludo():
 ##################################################################
 
 # Se crea una orden que se asocia al equipo asignado a un usuario
-@app.route('/crear-orden', methods=['POST'])
+@app.route('/crear-orden-asignacion', methods=['POST'])
 def crear_orden():
     resultados = []
     data = request.get_json()  
@@ -202,13 +224,25 @@ def crear_orden():
 def aignar_equipos():
     resultados = []
     data = request.get_json()
+    print("------------------------------------------\nASIGNAR")
+    print(data)
     result = models.asignar_equipos(data)
+    print('\nORDERN - MAIN')
+    print(result)
     claves = ('id', 'orden_de_asignacion', 'serial', 'etiqueta', 'asignado', 'user', 'createat', 'createby', 'updateat', 'updateby')
     for objetos in result:
         list2dic = dict(zip(claves, objetos)) 
         resultados.append(list2dic)
 
     return jsonify(resultados)
+
+@app.route('/validar-equipos', methods=['POST'])
+def validar_equipos():
+    data = request.get_json()
+    # print(data)
+    result = models.validar_equipos(data)
+    # print(result)
+    return jsonify(data)
 
 
 if __name__ == '__main__':

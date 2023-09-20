@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import EquiposAsignados from './equiposAsignados/equiposAsignados';
+import PdfDocument from './pdf/pdfDocument';
 
 
 const router = createBrowserRouter([
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/equipos-asignados",
     element: <EquiposAsignados/>,
+  },
+  {
+    path: "/pdf",
+    element: <PdfDocument/>,
   },
 ]);
 

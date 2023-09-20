@@ -15,6 +15,7 @@ const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
           <th>Etiqueta</th>
           <th>Tipo</th>
           <th>Quitar de Nota</th>
+          <th>Validado</th>
         </tr>
       </thead>
       <tbody>
@@ -51,6 +52,16 @@ const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
               <td>{e.type}</td>
               <td className='mx-auto'>
                 <Button variant="outline-danger" onClick={() => retirarEquipo(e.name)}>Quitar</Button>{' '}
+              </td>
+              <td >{e.validado ? 
+                <Alert key='success' variant='success'>
+                Validado
+                </Alert>
+                :
+                <Alert key='danger' variant='danger'>
+                No validado
+                </Alert>
+              }
               </td>
               {/* <td>{e?.serial}</td>
               <td>{e?.type}</td> */}

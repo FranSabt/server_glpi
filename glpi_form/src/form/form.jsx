@@ -9,6 +9,7 @@ import DropNames from './dropname';
 import TablaEquipos from './tableSeleccionar';
 import TablaEquiposSeleccionados from './tableSeleccionados'
 import AgregarManualmente from './agregarManualmente';
+import { asignar } from './asignar';
 
 /**
  * Componente principal de la dirección raíz de la aplicación.
@@ -36,6 +37,7 @@ const MyForm = () => {
   const [equiposSeleccionados, setEquiposSeleccionados] = useState([]);
   const [user, setUser] = useState({});
   const [notaEntrega, setNotaEntrega] = useState(false);
+  const [disable, setDisable] = useState(true);
   
   ////////////////////////////////////////////////////////////
 
@@ -99,6 +101,7 @@ const MyForm = () => {
     if (!equiposSeleccionados.some(e => (e.serial !== undefined && e.serial === equipo.serial) && e.name === equipo.name && (e.other_serial !== undefined && e.other_serial === equipo.other_serial))) {
       const nuevoArrayEquipos = [...equiposSeleccionados, equipo];
       setEquiposSeleccionados(nuevoArrayEquipos);
+      setDisable(true)
     }
     else {
       alert(`El equipo ${equipo.name} ya esta en la lista de equipos seleccioandos.`)
@@ -116,9 +119,19 @@ const MyForm = () => {
 
   const mostrarPDF = () => {
     setNotaEntrega(!notaEntrega)
+    asignar(equiposSeleccionados, user)
   }
 
   ////////////////////////////////////////////////////////////////
+
+  const validar = async (equipos) => {
+    const response = await axios.post(`http://localhost:5000/validar-equipos`, equipos)
+    setEquiposSeleccionados(response.data)
+    if (response.status == 200 || response.status == 201){
+      const isDisable = equiposSeleccionados.find((e) => e.validado === false)
+      setDisable(isDisable)
+    }
+  }
 
   ////////////////////////////////////////////////////////////////
   
@@ -168,11 +181,12 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={mostrarPDF}>PDF</Button>
+            <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={() => validar(equiposSeleccionados)}>Validar</Button>
+            <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button>
             {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
-            <PdfDocument user={user} equipos={equiposSeleccionados}/>
-          </PDFViewer>
+                <PdfDocument user={user} equipos={equiposSeleccionados}/>
+              </PDFViewer>
           : null}
           </Container>
         </div>
