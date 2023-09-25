@@ -212,19 +212,23 @@ def asignar_equipos(data):
     id = 0
     for equip in data:
         orden_de_asignacion  = equip.get('orden_de_asignacion')
+        user                 = equip.get('user')
         serial               = equip.get('serial') or 'sin serial'
         etiqueta             = equip.get('etiqueta') or 'sin etiqueta'
+        cantidad             = equip.get('cantidad') or 1
+        tipo                 = equip.get('tipo') or 1
         asignado             = True
-        user                 = equip.get('user')
         createat             = datetime.now().strftime('%Y-%m-%d')
-        createby             = equip.get('createby') or 'admin'
+        createby             = equip.get('createby') or 999
         updateat             = datetime.now().strftime('%Y-%m-%d')
-        updateby             = equip.get('updateby') or 'admin'
+        updateby             = equip.get('updateby') or 999
+
+
 
 
         conn = conexion()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO equipos_asignados ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)", ( orden_de_asignacion, serial, etiqueta, asignado, user, createat, createby, updateat, updateby))
+        cursor.execute("INSERT INTO equipos_asignados ( orden_de_asignacion, user, serial, etiqueta, cantidad, asignado, tipo, create_at, create_by, update_at, update_by) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", ( orden_de_asignacion, user, serial, etiqueta, cantidad, asignado,  tipo, createat, createby, updateat, updateby))
         conn.commit()  # confirmar la transacción
 
         id = equip.get('orden_de_asignacion')  # obtener el ID de la última fila insertada

@@ -3,6 +3,13 @@ import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
 
+/**
+ *  Renderiza los equipos seleccionados por el usuario para generar la nota de entrega.
+ *  Cada elemento posee un boton que permite sacarlo de la lista.
+ *   
+ *  Debe haber por lo menos un elemento para poder renderizar el PDF.
+ */
+
 const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
   //console.log('data tabla: ', data)
   return (
@@ -63,8 +70,6 @@ const TablaEquiposSeleccionados = ({data, retirarEquipo}) => {
                 </Alert>
               }
               </td>
-              {/* <td>{e?.serial}</td>
-              <td>{e?.type}</td> */}
             </tr>
             : null
             )

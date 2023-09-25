@@ -55,7 +55,7 @@ const MyForm = () => {
 
   ////////////////////////////////////////////////////////////
 
-  //* Metodo apra seleccionar un unico usuario y poder traer lo quipos asignados al mismo *//
+  //* Metodo apra seleccionar un único usuario y poder traer lo quipos asignados al mismo *//
   const handleUserSelect = (userSelected) => {
     // console.log('UserSelected', userSelected)
     const myUser = data.find(e => e.name === userSelected)
@@ -124,6 +124,7 @@ const MyForm = () => {
 
   ////////////////////////////////////////////////////////////////
 
+  //* Envia los equipos a la API y verifica que no se encuentren asignados *//
   const validar = async (equipos) => {
     const response = await axios.post(`http://localhost:5000/validar-equipos`, equipos)
     setEquiposSeleccionados(response.data)

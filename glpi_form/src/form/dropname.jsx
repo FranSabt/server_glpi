@@ -1,6 +1,17 @@
 // import Dropdown from 'react-bootstrap/Dropdown';
 import Form from "react-bootstrap/Form";
 
+/**
+ *  El compontonete recibe la info de los usuarios y renderiza los nombre y apellidos 
+ *  para su selección. 
+ *  
+ *  La elección de un usuario dispara un evento que llena la variable "user" en ecomponente "Form"
+ *  y permite llamar a todos los equipos asignados al mismo en el GLPI .
+ *  
+ *  Al realizar un cambio de usuario las listas de equipos son vaciadas para previnir asignaciones
+ *  que no correspondan al usuario.
+ */
+
 // eslint-disable-next-line react/prop-types
 const DropNames = ({ users, handleUserSelect, vaciarEquipos }) => {
   return (

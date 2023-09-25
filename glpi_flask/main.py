@@ -203,7 +203,7 @@ def saludo():
 
 ##################################################################
 ##              ENVIAR  MATERIALES ASIGNADOS TABLAS             ##
-##################################################################
+################################################################## 
 
 # Se crea una orden que se asocia al equipo asignado a un usuario
 @app.route('/crear-orden-asignacion', methods=['POST'])

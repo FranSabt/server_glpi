@@ -1,6 +1,7 @@
 // import React from 'react';
 import { Page, Text, Document, StyleSheet, Table, TableRow, TableCell,  } from '@react-pdf/renderer';
 
+//! COMPONENTE DE MODELO - NO USAR !//
 // Create styles
 const styles = StyleSheet.create({
   page: {

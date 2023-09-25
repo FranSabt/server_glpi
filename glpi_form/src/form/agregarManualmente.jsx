@@ -1,7 +1,13 @@
 /* eslint-disable react/prop-types */
-import{ useState } from 'react'
+import { useState } from 'react'
 import { Button } from 'react-bootstrap';
 
+/**
+ *  Algunos articulos pueden no estar listados, por lo general consumibles.
+ *  Se puede agregar manualmene dicho articulos.
+ *  Se verifican igualmente las etiquetas y los seriales de los equipos, caso de 
+ *  no tener ninguno de los dos se debe enviar como "consumible"
+ */
 
 const AgregarManualmente = ({ seleccionarEquipos, user }) => {
 
@@ -22,7 +28,9 @@ const AgregarManualmente = ({ seleccionarEquipos, user }) => {
   const enviarArticulo = () => {
     articulo.serial ? null : articulo.serial = undefined;
     articulo.other_serial ? null : articulo.other_serial = undefined;
-    articulo.type ? null : articulo.type = undefined;
+    articulo.type  ? 
+      null : //TODO: Checar
+      !articulo.type && !articulo.other_serial &&  !articulo.serial ? 'consumible' : undefined ;
 
     seleccionarEquipos({data: articulo})
   }

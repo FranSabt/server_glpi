@@ -2,6 +2,13 @@ import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
 
+/**
+ * Renderiza la lista de equipos asociada a un usuario al GLPI.
+ * 
+ * Cada equipo posee un boton para se añadido a la lista de equipos seleccionados.
+ * Si el equipo no posee ni "serial" ni "etiqueta" no podrá ser seleccionado en la lista.
+ *  - Si se necesita ese equipo se puede cambiar en GLPI o agregar manualmente.
+ */
 // eslint-disable-next-line react/prop-types
 const TablaEquipos = ({ data, seleccionarEquipos }) => {
   //console.log('data tabla: ', data)

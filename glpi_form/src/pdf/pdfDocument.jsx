@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import {
   Document,
   Page,
@@ -8,6 +8,8 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import  Logo  from '../assets/NetcomLogo.png'
+
+//* Componente que general el archivo PDF *//
 
 const styles = StyleSheet.create({
   page: {
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
 //   },
 // ];
 
+//* Generamos un Date para luego parsearlo a un formato manejable *//
 const fecha = new Date();
 
 const dia = fecha.getDate(); // Obtener el día del mes (1-31)
@@ -145,21 +148,23 @@ const anno = fecha.getFullYear(); // Obtener el año de cuatro dígitos
 const PdfDocument = ({user, equipos}) => {
   return (
     <Document>
+      {/* ENCABEZADO */}
       <Page size="Letter" style={styles.page}  wrap>
         <View style={styles.section}>
           <Image
             src={Logo}
             style={styles.logo}
           />
-          {/* <Text style={styles.date}>Valencia {`${dia}/${mes}/${anno}`}</Text> */}
+          {/* PRESENTACION DE LA NOTA DE ENTREGA */}
           <Text style={styles.title}>NOTA DE ENTREGA</Text>
-
           <Text style={styles.text}>
             Por medio de la presente, la Organización Netcom Plus C. A., a través
             del departamento de Tecnología de Información (IT), hace entrega en modo de
             asignación del(los) siguiente(s) equipo(s):
           </Text>
 
+          {/* TABLA DE EQUIPOS SELECCIONADOS */}
+          {/* Hay que modelarla con estilos, no hay uncomponente TABLE en la version actual de la libreria */}
           <View style={styles.table}>
             <View style={styles.tableRow}>
               <Text style={styles.tableCellTitle}>Equipo</Text>
@@ -178,7 +183,8 @@ const PdfDocument = ({user, equipos}) => {
             ))}
           </View>
 
-
+          {/* CONDICIONES DE USO DE LOS EQUIPOS */}
+          {/* REALIZA UN SALTO EN LOS COMPONENTES SI HAY  MAS DE 7 ELMENTOS */}
           {equipos.length > 7 ? 
           <Text style={styles.subtitle} break >CONDICIONES GENERALES DE USO</Text>
           :
@@ -205,6 +211,7 @@ const PdfDocument = ({user, equipos}) => {
             6 - Si surge algún comentario o duda en relación al uso de estos activos, se solicita que se dirija al Departamento de Tecnología e Información para obtener orientación.
           </Text>
 
+          {/* CUADROS DE FIRMAS */}
           <View style={styles.signatureContainer}>
             <View style={styles.signature}>
               <Text style={styles.signatureLabel}>
@@ -218,6 +225,7 @@ const PdfDocument = ({user, equipos}) => {
             </View>
           </View>
         </View>
+        {/* PIE DE PAGINA  */}
         <Text style={styles.footer} render={({ pageNumber, totalPages }) => `Nota de entrega para ${user.fisrtname} ${user.realname} con fecha: ${dia}/${mes}/${anno}\n\n${pageNumber} / ${totalPages}`} fixed />
       </Page>
     </Document>

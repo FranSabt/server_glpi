@@ -62,26 +62,30 @@ Ir a la carpeta glpi_form en la terminal y iniciar el comando:
 
 
 --------------------------------------------------------------------
+
 CREATE TABLE `glpi`.`equipos_asignados` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `orden_de_asignacion` INT NULL,
-  `serial` VARCHAR(120) NULL,
-  `etiqueta` VARCHAR(120) NULL,
-  `asignado` TINYINT NULL DEFAULT 1,
-  `user` VARCHAR(250) NULL,
-  `createat` DATE NULL,
-  `createby`  VARCHAR(50)  NULL,
-  `updateat` DATE NULL,
-  `updateby`  VARCHAR(50)  NULL,
+  `user` INT NULL,
+  `serial` VARCHAR(45) NULL,
+  `etiqueta` VARCHAR(45) NULL,
+  `cantidad` INT NULL,
+  `asignado` TINYINT NULL,
+  `tipo` VARCHAR(45) NULL,
+  `create_at` DATE NULL,
+  `create_by` INT NULL,
+  `update_at` DATE NULL,
+  `update_by` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+
 
 --------------------------------------------------------------------
 
 CREATE TABLE `glpi`.`orden_de_asignacion` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `date` DATE NULL,
-  `usuario_asignado` VARCHAR(250) NULL,
+  `usuario_asignado` INT NULL,
   `user_id_tech` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
