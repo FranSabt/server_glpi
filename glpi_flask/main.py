@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import models
+import mail
 
 app = Flask(__name__)
 
-import mail
 
 app = Flask(__name__)
 app.config['MAIL_SERVER']   = 'smtp.netcomplusve.com'
@@ -80,6 +80,7 @@ def saludo():
         list2dic['validado']=False
         # print(list2dic)
         resultados.append(list2dic)
+    
 
     ##* Celulares *##
     result = models.obtener_telefonos(id)
@@ -187,6 +188,19 @@ def saludo():
         # print(list2dic)
         resultados.append(list2dic)
 
+    
+    # ##* Consumibles *##
+    # result = models.consumibles(id)
+
+    # claves = ('id', 'name', 'entities_id', 'is_recursive', 'location',  'serial', 'other_serial')
+    # for objetos in result:
+    #     list2dic = dict(zip(claves, objetos)) #convertimos la tupla result y la lista claves en un diccionario
+    #     list2dic['type']='Equipos pasivos'
+    #     list2dic['validado']=False
+    #     # print(list2dic)
+    #     resultados.append(list2dic)
+
+
     # ##* Puntos de venta *##
     # #! La tabla no existia en copia de BD
     # result = models.obtener_puntos_de_ventas(id)
@@ -197,6 +211,7 @@ def saludo():
     #     list2dic['type']='Punto de venta'
     #     # print(list2dic)
 
+    resultados = models.validar_equipos(resultados)
 
     return  jsonify(resultados)
 

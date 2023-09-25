@@ -144,6 +144,16 @@ def obtener_equipos_pasivos(id):
     #print(registros)
     return registros
 
+def obtener_cosumibles(id):
+    con = conexion()
+    registros = []
+    with con.cursor() as cursor:
+        cursor.execute(f"SELECT * FROM glpi_consumableitems WHERE users_id_tech = {id}")
+    registros = cursor.fetchall()
+    con.close()
+    #print(registros)
+    return registros
+
 ##################################################################
 ##              ENVIAR  MATERIALES ASIGNADOS TABLAS             ##
 ##################################################################
@@ -152,7 +162,7 @@ def validar_equipos(data):
     for element in data:
         serial = element.get('serial')
         other_serial = element.get('other_serial')
-        if serial and serial != 'consumible':
+        if serial and serial != 'consumible' and serial != 'sin serial':
             print("Serial")
             print(element)
             print('*****')
@@ -165,12 +175,14 @@ def validar_equipos(data):
             print('Registro')
             print(registro)
             conn.close()
-            if registro: continue
+            if registro:
+                element['validado'] = False
+                continue
             else:  
                 element['validado'] = True
                 continue
 
-        if other_serial:
+        if other_serial and other_serial != 'sin etiqueta':
             print("Etiqueta")
             print(element)
             print('*****')
@@ -181,12 +193,16 @@ def validar_equipos(data):
             cursor.execute(f"SELECT * FROM equipos_asignados WHERE etiqueta = '{other_serial}'")
             registro = cursor.fetchall()
             conn.close()
-            if registro: 
+            if registro:
+                element['validado'] = False
                 continue
+
             else:  
                 element['validado'] = True
                 continue
-        if serial == 'consumible':
+            
+        # if serial == 'consumible':
+        else:
             element['validado'] = True
 
     return data
@@ -218,7 +234,7 @@ def asignar_equipos(data):
         serial               = equip.get('serial') or 'sin serial'
         etiqueta             = equip.get('etiqueta') or 'sin etiqueta'
         cantidad             = equip.get('cantidad') or 1
-        tipo                 = equip.get('tipo') or 1
+        tipo                 = equip.get('type') or 1
         asignado             = True
         createat             = datetime.now().strftime('%Y-%m-%d')
         createby             = equip.get('createby') or 999
