@@ -190,7 +190,7 @@ def validar_equipos(data):
             cursor = conn.cursor()
             print("CONEXION CREADA")
             print(" ")
-            cursor.execute(f"SELECT * FROM equipos_asignados WHERE etiqueta = '{other_serial}'")
+            cursor.execute(f"SELECT * FROM equipos_asignados WHERE etiqueta = '{other_serial}' AND asignado = '{1}'")
             registro = cursor.fetchall()
             conn.close()
             if registro:
@@ -300,10 +300,12 @@ def liberar_equipo(data):
     if other_serial and other_serial != 'sin etiqueta':
         cursor.execute("SELECT * FROM equipos_asignados WHERE etiqueta = %s", (other_serial,))
         registro_actual = cursor.fetchone()
+        print('registro actual' + str(registro_actual))
         if registro_actual:
             cursor.execute("UPDATE equipos_asignados SET asignado = 0 WHERE etiqueta = %s", (other_serial,))
             conn.commit()
             if cursor.rowcount > 0:
+                print('actualizado')
                 data['asignado'] = 0
                 data['validado'] = True
 

@@ -94,6 +94,11 @@ const MyForm = () => {
   //*  Permite selecciona un equipo para que este aparezca en la nota de entrega PDF *//
 
   const seleccionarEquipos = (equipoSeleccionado) => {
+
+    if(notaEntrega){
+      alert("No puede agregar elementos hasta limpiar las listas")
+      return 0;
+    }
     const equipo = equipoSeleccionado.data;
 
     // Verificar si el equipo ya existe en el array equiposSeleccionados
@@ -113,6 +118,10 @@ const MyForm = () => {
 
   //* Se elimina un quipo de la lista de seleccionados y de la nota de entrega PDF *//
   const retirarEquipo = (equipoSeleccionado) => {
+    if(notaEntrega){
+      alert("No puede retirar elementos hasta limpiar las listas")
+      return 0;
+    }
     const nuevoArrayEquipos = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
       setEquiposSeleccionados(nuevoArrayEquipos);
       // Chequea otra vez la validez de los equipos //
@@ -125,7 +134,6 @@ const MyForm = () => {
   const mostrarPDF = () => {
     setNotaEntrega(!notaEntrega)
     asignar(equiposSeleccionados, user)
-    vaciarEquipos()
   }
 
   ////////////////////////////////////////////////////////////////
@@ -138,6 +146,8 @@ const MyForm = () => {
       if (status === 200) {
         const equiposActualizados = equipos.map((e) => {
           if (e.id === data.id && (e.serial === data.serial || e.other_serial === data.other_serial)) {
+            console.log('LIBERAR');
+            console.log('Map',e, 'Py',data);
             return{...e,  asignado: data.asignado, validado: data.validado};
           }
           return e;
@@ -208,8 +218,7 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            {/* <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={() => validar(equiposSeleccionados)}>Validar</Button> */}
-            <Button disabled={disable || !equiposSeleccionados.length > 0 } onClick={mostrarPDF}>Registrar & PDF</Button>
+            { !notaEntrega ?  <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button> : <Button onClick={vaciarEquipos}>Limpiar</Button>}
             {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
                 <PdfDocument user={user} equipos={equiposSeleccionados}/>

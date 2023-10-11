@@ -262,10 +262,10 @@ def validar_equipos():
 @app.route('/liberar-equipos', methods=['POST'])
 def liberar_equipos():
     data = request.get_json()
-    print(data)
+    # print(data)
     # print(data)
     result = models.liberar_equipo(data)
-    print(result)
+    # print(result)
     return jsonify(result)
 
 
