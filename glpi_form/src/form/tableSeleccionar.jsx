@@ -10,7 +10,7 @@ import Alert from 'react-bootstrap/Alert';
  *  - Si se necesita ese equipo se puede cambiar en GLPI o agregar manualmente.
  */
 // eslint-disable-next-line react/prop-types
-const TablaEquipos = ({ data, seleccionarEquipos }) => {
+const TablaEquipos = ({ data, seleccionarEquipos, liberarEquipo }) => {
   //console.log('data tabla: ', data)
   return (
     <Table striped bordered hover>
@@ -56,10 +56,18 @@ const TablaEquipos = ({ data, seleccionarEquipos }) => {
                     </td>
                     <td>{e.type}</td>
                     <td className='mx-auto'>
-                      <Button variant="outline-primary" onClick={() => {
-                        console.log(e);
-                        seleccionarEquipos({ data: e })
-                      }}>Agregar</Button>{' '}
+                      {
+                        e.validado ?
+                        <Button variant="outline-primary" onClick={() => {
+                          console.log(e);
+                          seleccionarEquipos({ data: e })
+                        }}>Agregar</Button>
+                        :
+                        <Button variant="outline-danger" onClick={() => {
+                          console.log(e);
+                          liberarEquipo( e )
+                        }}>LIBERAR</Button>
+                      }
                     </td>
                     {/* <td>{e?.serial}</td>
               <td>{e?.type}</td> */}

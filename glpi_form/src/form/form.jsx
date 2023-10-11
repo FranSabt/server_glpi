@@ -125,8 +125,33 @@ const MyForm = () => {
   const mostrarPDF = () => {
     setNotaEntrega(!notaEntrega)
     asignar(equiposSeleccionados, user)
+    vaciarEquipos()
   }
 
+  ////////////////////////////////////////////////////////////////
+
+  const liberarEquipo = async (equipoLiberar) => {
+    try {
+      const response = await axios.post(`${url}/liberar-equipos`, equipoLiberar);
+      const { data, status } = response;
+  
+      if (status === 200) {
+        const equiposActualizados = equipos.map((e) => {
+          if (e.id === data.id && (e.serial === data.serial || e.other_serial === data.other_serial)) {
+            return{...e,  asignado: data.asignado, validado: data.validado};
+          }
+          return e;
+        });
+        setEquipos(equiposActualizados);
+      } else {
+        alert("Hubo un problema al liberar el equipo");
+      }
+    } catch (error) {
+      console.error("Ocurrió un error:", error);
+      alert("Hubo un problema al liberar el equipo");
+    }
+  };
+  
   ////////////////////////////////////////////////////////////////
 
   //* Envia los equipos a la API y verifica que no se encuentren asignados *//
@@ -176,7 +201,7 @@ const MyForm = () => {
           equiposSeleccionados?.length > 0 ?
           <Container>
             <h3>Equipos Seleccionados</h3>
-            <TablaEquiposSeleccionados data={equiposSeleccionados} retirarEquipo={retirarEquipo}/>
+            <TablaEquiposSeleccionados data={equiposSeleccionados} retirarEquipo={retirarEquipo} />
           </Container>
           : null
         }
@@ -201,7 +226,7 @@ const MyForm = () => {
         <h3>Equipos a seleccionar</h3>
         { //* PARA SELECCIOANR LOS EQUIPOS **//
           equipos?.length > 0 ?
-          <TablaEquipos data={equipos} seleccionarEquipos={seleccionarEquipos}/>
+          <TablaEquipos data={equipos} seleccionarEquipos={seleccionarEquipos} liberarEquipo={liberarEquipo}/>
           : null
         }
         <div>

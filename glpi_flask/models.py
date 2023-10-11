@@ -232,7 +232,7 @@ def asignar_equipos(data):
         orden_de_asignacion  = equip.get('orden_de_asignacion')
         user                 = equip.get('user')
         serial               = equip.get('serial') or 'sin serial'
-        etiqueta             = equip.get('etiqueta') or 'sin etiqueta'
+        etiqueta             = equip.get('other_serial') or 'sin etiqueta'
         cantidad             = equip.get('cantidad') or 1
         tipo                 = equip.get('type') or 1
         asignado             = True
@@ -246,27 +246,71 @@ def asignar_equipos(data):
 
 
         # Verificar si existe una entrada con el mismo serial
-        cursor.execute("SELECT * FROM equipos_asignados WHERE serial = %s", (serial,))
-        existe_serial = cursor.fetchone()
+        existe_serial = None
+        if serial != 'sin serial':
+            cursor.execute("SELECT * FROM equipos_asignados WHERE serial = %s", (serial,))
+            existe_serial = cursor.fetchone()
 
         # Verificar si existe una entrada con la misma etiqueta
-        cursor.execute("SELECT * FROM equipos_asignados WHERE etiqueta = %s", (etiqueta,))
-        existe_etiqueta = cursor.fetchone()
+        existe_etiqueta = None
+        if etiqueta != 'sin etiqueta':
+            cursor.execute("SELECT * FROM equipos_asignados WHERE etiqueta = %s", (etiqueta,))
+            existe_etiqueta = cursor.fetchone()
 
-        if not existe_serial:
-
+        if not existe_serial and not existe_etiqueta:
             
             cursor.execute("INSERT INTO equipos_asignados ( orden_de_asignacion, user, serial, etiqueta, cantidad, asignado, tipo, create_at, create_by, update_at, update_by) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", ( orden_de_asignacion, user, serial, etiqueta, cantidad, asignado,  tipo, createat, createby, updateat, updateby))
             conn.commit()  # confirmar la transacción
-
             id = equip.get('orden_de_asignacion')  # obtener el ID de la última fila insertada
 
         elif existe_serial:
             # Si existe una entrada con el mismo serial o etiqueta, entonces actualizar los valores
             cursor.execute("UPDATE equipos_asignados SET user = %s, etiqueta = %s, orden_de_asignacion = %s, update_at = %s, update_by = %s, asignado = 1 WHERE serial = %s", (user, etiqueta, orden_de_asignacion, updateat, updateby, serial))
             conn.commit()  # confirmar la transacción
+            id = equip.get('orden_de_asignacion')  # obtener el ID de la última fila insertada
+
+        elif existe_etiqueta:
+            # Si existe una entrada con el mismo serial o etiqueta, entonces actualizar los valores
+            cursor.execute("UPDATE equipos_asignados SET user = %s, serial = %s, orden_de_asignacion = %s, update_at = %s, update_by = %s, asignado = 1 WHERE etiqueta = %s", (user, serial, orden_de_asignacion, updateat, updateby, etiqueta))
+            conn.commit()  # confirmar la transacción
+            id = equip.get('orden_de_asignacion')  # obtener el ID de la última fila insertada
 
         cursor.execute("SELECT * FROM equipos_asignados WHERE orden_de_asignacion = %s", (id,))
         orden = cursor.fetchone()  # obtener los datos de la última fila insertada
 
     return [orden]
+
+def liberar_equipo(data):
+    serial = data.get('serial')
+    other_serial = data.get('other_serial')
+    conn = conexion()
+    cursor = conn.cursor()
+    
+    if serial and serial != 'consumible' and serial != 'sin serial':
+        cursor.execute("SELECT * FROM equipos_asignados WHERE serial = %s", (serial,))
+        registro_actual = cursor.fetchone()
+        if registro_actual:
+            cursor.execute("UPDATE equipos_asignados SET asignado = 0 WHERE serial = %s", (serial,))
+            conn.commit()
+            if cursor.rowcount > 0:
+                data['asignado'] = 0
+                data['validado'] = True
+
+    
+    if other_serial and other_serial != 'sin etiqueta':
+        cursor.execute("SELECT * FROM equipos_asignados WHERE etiqueta = %s", (other_serial,))
+        registro_actual = cursor.fetchone()
+        if registro_actual:
+            cursor.execute("UPDATE equipos_asignados SET asignado = 0 WHERE etiqueta = %s", (other_serial,))
+            conn.commit()
+            if cursor.rowcount > 0:
+                data['asignado'] = 0
+                data['validado'] = True
+
+    conn.close()
+    print(data)
+    
+    return data
+
+
+
