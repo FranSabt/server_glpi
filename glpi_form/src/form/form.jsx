@@ -13,22 +13,22 @@ import { asignar } from './asignar';
 
 /**
  * Componente principal de la dirección raíz de la aplicación.
- * 
- * Primero busca la lista de usuarios, una vez seleccionado el usuario permite 
+ *
+ * Primero busca la lista de usuarios, una vez seleccionado el usuario permite
  * realizar la busqueda en la BD de todos los articulos asignados a dicho usuario.
- * 
+ *
  * Por ende los articulo primero deben ser asignados en la interfaz del GLPI.
- * 
+ *
  * Se seleccionan los articulos y estos apareceran en la planilla PDF
- * 
+ *
  * TODO: lo siguiente está pendiente
- * 
- * Una vez seleccionados los equipos se verifica que aquellos que poseen serial y/o etiqueta (other_serial) 
+ *
+ * Una vez seleccionados los equipos se verifica que aquellos que poseen serial y/o etiqueta (other_serial)
  * no se encuentren asignados a un usuario, de lo contrario se bloquea la planilla.
- * 
+ *
  * Si se debe desbloquear un producto pasa a "equipos asignados."
  */
-
+const url = 'http://localhost:5000';
 
 const MyForm = () => {
 
@@ -38,12 +38,12 @@ const MyForm = () => {
   const [user, setUser] = useState({});
   const [notaEntrega, setNotaEntrega] = useState(false);
   const [disable, setDisable] = useState(true);
-  
+
   ////////////////////////////////////////////////////////////
 
   //* Llamada a la API para traer usuarios *//
   useEffect(() => {
-    axios.get('http://localhost:5000/users').then((response) => {
+    axios.get(url+'/users').then((response) => {
       setData(response.data.data);
       // console.log(response.data)
     })
@@ -55,22 +55,22 @@ const MyForm = () => {
 
   ////////////////////////////////////////////////////////////
 
-  //* Metodo apra seleccionar un único usuario y poder traer lo quipos asignados al mismo *//
+  //* Metodo para seleccionar un único usuario y poder traer lo quipos asignados al mismo *//
   const handleUserSelect = (userSelected) => {
     // console.log('UserSelected', userSelected)
     const myUser = data.find(e => e.name === userSelected)
     // console.log('MYUSER ', myUser);
     setUser(myUser);
   };
-  
+
 
   ////////////////////////////////////////////////////////////
 
   //* Llamada a la API para traer los quipos asociados al usuario *//
   const buscarEquipos = async () => {
     try{
-      const response = await axios.get(`http://localhost:5000/user-detail?id=${user.id}`)
-      console.log(response)
+      const response = await axios.get(`${url}/user-detail?id=${user.id}`)
+      // console.log(response)
       setEquipos(response.data)
     }
     catch (error){
@@ -83,9 +83,9 @@ const MyForm = () => {
   /**
    * Vacia los estados donde se encuentran los equipos encontrados y seleccionados
    * cuando se realiza un cambio de usuario en la seleccion de usuarios.
-   * 
-   * Se evita que se pueda crear una nota de entrega a un usuario 'A' que tenga 
-   * los quipos asignado a un usuario 'B'. 
+   *
+   * Se evita que se pueda crear una nota de entrega a un usuario 'A' que tenga
+   * los quipos asignado a un usuario 'B'.
    */
   const vaciarEquipos = () => { setEquipos([]), setEquiposSeleccionados([])}
 
@@ -95,13 +95,15 @@ const MyForm = () => {
 
   const seleccionarEquipos = (equipoSeleccionado) => {
     const equipo = equipoSeleccionado.data;
-  
+
     // Verificar si el equipo ya existe en el array equiposSeleccionados
     // Si el serial y/o la etiqueta no es "undefined" se compara si existe en la lista de equipos seleccionados
     if (!equiposSeleccionados.some(e => (e.serial !== undefined && e.serial === equipo.serial) && e.name === equipo.name && (e.other_serial !== undefined && e.other_serial === equipo.other_serial))) {
       const nuevoArrayEquipos = [...equiposSeleccionados, equipo];
       setEquiposSeleccionados(nuevoArrayEquipos);
-      setDisable(true)
+      // setDisable(true)
+      const isDisable = nuevoArrayEquipos.find((e) => e.validado === false)
+      setDisable(isDisable)
     }
     else {
       alert(`El equipo ${equipo.name} ya esta en la lista de equipos seleccioandos.`)
@@ -111,10 +113,13 @@ const MyForm = () => {
 
   //* Se elimina un quipo de la lista de seleccionados y de la nota de entrega PDF *//
   const retirarEquipo = (equipoSeleccionado) => {
-    const equipo = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
-      setEquiposSeleccionados(equipo);
+    const nuevoArrayEquipos = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
+      setEquiposSeleccionados(nuevoArrayEquipos);
+      // Chequea otra vez la validez de los equipos //
+    const isDisable =  nuevoArrayEquipos.find((e) => e.validado === false)
+    setDisable(isDisable)
   }
-  
+
   ////////////////////////////////////////////////////////////////
 
   const mostrarPDF = () => {
@@ -125,19 +130,15 @@ const MyForm = () => {
   ////////////////////////////////////////////////////////////////
 
   //* Envia los equipos a la API y verifica que no se encuentren asignados *//
-  const validar = async (equipos) => {
-    const response = await axios.post(`http://localhost:5000/validar-equipos`, equipos)
-    setEquiposSeleccionados(response.data)
-    if (response.status == 200 || response.status == 201){
-      const isDisable = equiposSeleccionados.find((e) => e.validado === false)
-      setDisable(isDisable)
-    }
-  }
+  // const validar = async () => {
+  //     const isDisable = equiposSeleccionados.find((e) => e.validado === false)
+  //     setDisable(isDisable)
+  // }
 
   ////////////////////////////////////////////////////////////////
-  
+
   //console.log('equipoSeleccionado', equiposSeleccionados)
-  console.log(user)
+  // console.log(user)
   return (
     <>
       <Container className='sm m-5 px-5'>
@@ -146,7 +147,7 @@ const MyForm = () => {
           {
             data?.length ?
             <DropNames users={data} handleUserSelect={handleUserSelect} vaciarEquipos={vaciarEquipos} />
-            : 
+            :
             <button className="btn btn-primary" type="button" disabled>
               <span className="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
             <span role="status">Cargando usuarios...</span>
@@ -157,7 +158,7 @@ const MyForm = () => {
         <div>
           <div>
           {
-            user && (user !== 'Seleccione un usuario') ? 
+            user && (user !== 'Seleccione un usuario') ?
             <Container className='m-5 '>
               <h4>Nombre  :   <span className="badge bg-dark">{user.fisrtname ? user.fisrtname : ''}</span></h4>
               <h4>Apellido: <span className="badge bg-dark">{user.realname ? user.realname : ''}</span></h4>
@@ -182,8 +183,8 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={() => validar(equiposSeleccionados)}>Validar</Button>
-            <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button>
+            {/* <Button disabled={ equiposSeleccionados.length > 0 && user.name ? false : true} onClick={() => validar(equiposSeleccionados)}>Validar</Button> */}
+            <Button disabled={disable || !equiposSeleccionados.length > 0 } onClick={mostrarPDF}>Registrar & PDF</Button>
             {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
                 <PdfDocument user={user} equipos={equiposSeleccionados}/>
@@ -205,7 +206,7 @@ const MyForm = () => {
         }
         <div>
             {
-              user.name ? 
+              user.name ?
               <Container className='m-5 '>
                 <Button onClick={buscarEquipos}>
                   Buscar Equipos
@@ -213,7 +214,7 @@ const MyForm = () => {
               </Container>
               : null
             }
-            
+
         </div>
       </Container>
     </>
