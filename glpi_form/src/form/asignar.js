@@ -37,6 +37,6 @@ export const asignar = async (equipos, user) => {
   })
   const registro = await registarEquiposEnAsignacion(equiposAsignar);
   console.log("REGISTRO", registro)
-  return registro;
+  return {registro, correlativo};
 
 }

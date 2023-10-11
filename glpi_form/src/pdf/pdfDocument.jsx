@@ -113,7 +113,14 @@ const styles = StyleSheet.create({
     textAlign: "justify",
     fontFamily: "Helvetica",
     fontStyle: 'italic',
-  }
+  },
+  correlativo: {
+    position: 'absolute',
+    top: 18,
+    right: 0,
+    fontSize: 14,
+    fontFamily: "Helvetica-Bold",
+  },
 });
 
 // const productos = [
@@ -145,7 +152,7 @@ const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por lo que sumamos 1)
 const anno = fecha.getFullYear(); // Obtener el año de cuatro dígitos
 
 // eslint-disable-next-line react/prop-types
-const PdfDocument = ({user, equipos}) => {
+const PdfDocument = ({user, equipos, correlativo}) => {
   return (
     <Document>
       {/* ENCABEZADO */}
@@ -155,6 +162,8 @@ const PdfDocument = ({user, equipos}) => {
             src={Logo}
             style={styles.logo}
           />
+          <Text style={styles.correlativo}>Correlativo Nº {correlativo}</Text>
+
           {/* PRESENTACION DE LA NOTA DE ENTREGA */}
           <Text style={styles.title}>NOTA DE ENTREGA</Text>
           <Text style={styles.text}>

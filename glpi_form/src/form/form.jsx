@@ -38,6 +38,7 @@ const MyForm = () => {
   const [user, setUser] = useState({});
   const [notaEntrega, setNotaEntrega] = useState(false);
   const [disable, setDisable] = useState(true);
+  const [correlativo, setCorrelativo] = useState(null)
 
   ////////////////////////////////////////////////////////////
 
@@ -87,7 +88,7 @@ const MyForm = () => {
    * Se evita que se pueda crear una nota de entrega a un usuario 'A' que tenga
    * los quipos asignado a un usuario 'B'.
    */
-  const vaciarEquipos = () => { setEquipos([]), setEquiposSeleccionados([])}
+  const vaciarEquipos = () => { setEquipos([]), setEquiposSeleccionados([]), setNotaEntrega(false)}
 
   ///////////////////////////////////////////////////////////////
 
@@ -131,9 +132,12 @@ const MyForm = () => {
 
   ////////////////////////////////////////////////////////////////
 
-  const mostrarPDF = () => {
+  const mostrarPDF = async() => {
     setNotaEntrega(!notaEntrega)
-    asignar(equiposSeleccionados, user)
+    const res = await asignar(equiposSeleccionados, user);
+    const { correlativo } = res;
+    // console.log(correlativo[0].id);
+    setCorrelativo(correlativo[0].id)
   }
 
   ////////////////////////////////////////////////////////////////
@@ -146,8 +150,6 @@ const MyForm = () => {
       if (status === 200) {
         const equiposActualizados = equipos.map((e) => {
           if (e.id === data.id && (e.serial === data.serial || e.other_serial === data.other_serial)) {
-            console.log('LIBERAR');
-            console.log('Map',e, 'Py',data);
             return{...e,  asignado: data.asignado, validado: data.validado};
           }
           return e;
@@ -218,10 +220,10 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            { !notaEntrega ?  <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button> : <Button onClick={vaciarEquipos}>Limpiar</Button>}
+            { !notaEntrega ?  <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button> : <Button variant="warning" onClick={vaciarEquipos} >Limpiar</Button>}
             {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
-                <PdfDocument user={user} equipos={equiposSeleccionados}/>
+                <PdfDocument user={user} equipos={equiposSeleccionados} correlativo={correlativo}/>
               </PDFViewer>
           : null}
           </Container>
