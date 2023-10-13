@@ -175,9 +175,6 @@ const MyForm = () => {
 
   ////////////////////////////////////////////////////////////////
 
-  //console.log('equipoSeleccionado', equiposSeleccionados)
-  console.log("Equipos",equiposSeleccionados.length);
-  console.log(disable)
   return (
     <>
       <Container className='sm m-5 px-5'>
