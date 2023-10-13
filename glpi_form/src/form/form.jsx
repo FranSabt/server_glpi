@@ -107,7 +107,6 @@ const MyForm = () => {
     if (!equiposSeleccionados.some(e => (e.serial !== undefined && e.serial === equipo.serial) && e.name === equipo.name && (e.other_serial !== undefined && e.other_serial === equipo.other_serial))) {
       const nuevoArrayEquipos = [...equiposSeleccionados, equipo];
       setEquiposSeleccionados(nuevoArrayEquipos);
-      // setDisable(true)
       const isDisable = nuevoArrayEquipos.find((e) => e.validado === false)
       if (isDisable === false) setDisable(false)
     }
@@ -123,8 +122,9 @@ const MyForm = () => {
       alert("No puede retirar elementos hasta limpiar las listas")
       return 0;
     }
-    const nuevoArrayEquipos = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
+  const nuevoArrayEquipos = equiposSeleccionados.filter(e => e.name !== equipoSeleccionado);
       setEquiposSeleccionados(nuevoArrayEquipos);
+      
       // Chequea otra vez la validez de los equipos //
     const isDisable =  nuevoArrayEquipos.find((e) => e.validado === false)
     if (isDisable === false) setDisable(false)
@@ -135,9 +135,10 @@ const MyForm = () => {
 
   const mostrarPDF = async() => {
     setNotaEntrega(!notaEntrega)
+    
     const res = await asignar(equiposSeleccionados, user);
     const { correlativo } = res;
-    // console.log(correlativo[0].id);
+
     setCorrelativo(correlativo[0].id)
   }
 
