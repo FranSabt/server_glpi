@@ -109,7 +109,7 @@ const MyForm = () => {
       setEquiposSeleccionados(nuevoArrayEquipos);
       // setDisable(true)
       const isDisable = nuevoArrayEquipos.find((e) => e.validado === false)
-      setDisable(isDisable)
+      if (isDisable === false) setDisable(false)
     }
     else {
       alert(`El equipo ${equipo.name} ya esta en la lista de equipos seleccioandos.`)
@@ -127,7 +127,8 @@ const MyForm = () => {
       setEquiposSeleccionados(nuevoArrayEquipos);
       // Chequea otra vez la validez de los equipos //
     const isDisable =  nuevoArrayEquipos.find((e) => e.validado === false)
-    setDisable(isDisable)
+    if (isDisable === false) setDisable(false)
+    else setDisable(true)
   }
 
   ////////////////////////////////////////////////////////////////
@@ -175,7 +176,8 @@ const MyForm = () => {
   ////////////////////////////////////////////////////////////////
 
   //console.log('equipoSeleccionado', equiposSeleccionados)
-  // console.log(user)
+  console.log("Equipos",equiposSeleccionados.length);
+  console.log(disable)
   return (
     <>
       <Container className='sm m-5 px-5'>
@@ -220,7 +222,7 @@ const MyForm = () => {
         </div>
         <div>
           <Container>
-            { !notaEntrega ?  <Button disabled={disable} onClick={mostrarPDF}>Registrar & PDF</Button> : <Button variant="warning" onClick={vaciarEquipos} >Limpiar</Button>}
+            { !notaEntrega ?  <Button disabled={disable && equiposSeleccionados.length === 0} onClick={mostrarPDF}>Registrar & PDF</Button> : <Button variant="warning" onClick={vaciarEquipos} >Limpiar</Button>}
             {notaEntrega && equiposSeleccionados.length > 0 ?
               <PDFViewer width={"100%"} height={800}>
                 <PdfDocument user={user} equipos={equiposSeleccionados} correlativo={correlativo}/>
